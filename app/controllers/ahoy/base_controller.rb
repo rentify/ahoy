@@ -3,6 +3,8 @@ module Ahoy
     # skip all filters
     skip_filter *_process_action_callbacks.map(&:filter)
 
+    before_filter :load_authlogic
+
     before_filter :halt_bots
 
     protected
@@ -15,6 +17,10 @@ module Ahoy
       if !Ahoy.track_bots and browser.bot?
         render json: {}
       end
+    end
+
+    def load_authlogic
+      Authlogic::Session::Base.controller = Authlogic::ControllerAdapters::RailsAdapter.new(self)
     end
 
   end
