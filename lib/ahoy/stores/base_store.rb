@@ -28,6 +28,9 @@ module Ahoy
       end
 
       def report_exception(e)
+        Rails.logger.debug "RAISING AHOY ERROR"
+        Rails.logger.debug e.inspect
+        Bugsnag.notify(e)
         Errbase.report(e)
       end
 
