@@ -1,11 +1,10 @@
 module Ahoy
   class VisitProperties
-
-    REQUEST_KEYS = [:ip, :user_agent, :referrer, :landing_page, :platform, :app_version, :os_version]
+    REQUEST_KEYS = [:ip, :user_agent, :referrer, :landing_page, :platform, :app_version, :os_version, :screen_height, :screen_width]
     TRAFFIC_SOURCE_KEYS = [:referring_domain, :search_keyword]
     UTM_PARAMETER_KEYS = [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_campaign]
     TECHNOLOGY_KEYS = [:browser, :os, :device_type]
-    LOCATION_KEYS = [:country, :region, :city]
+    LOCATION_KEYS = [:country, :region, :city, :postal_code, :latitude, :longitude]
 
     KEYS = REQUEST_KEYS + TRAFFIC_SOURCE_KEYS + UTM_PARAMETER_KEYS + TECHNOLOGY_KEYS + LOCATION_KEYS
 
@@ -25,11 +24,15 @@ module Ahoy
     end
 
     def keys
-      KEYS
+      if Ahoy.geocode == true # no location keys for :async
+        KEYS
+      else
+        KEYS - LOCATION_KEYS
+      end
     end
 
     def to_hash
-      keys.inject({}){|memo, key| memo[key] = send(key); memo }
+      keys.inject({}) { |memo, key| memo[key] = send(key); memo }
     end
 
     protected
@@ -53,6 +56,5 @@ module Ahoy
     def location_deckhand
       @location_deckhand ||= Deckhands::LocationDeckhand.new(request_deckhand.ip)
     end
-
   end
 end

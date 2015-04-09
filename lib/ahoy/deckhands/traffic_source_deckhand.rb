@@ -1,13 +1,12 @@
 module Ahoy
   module Deckhands
     class TrafficSourceDeckhand
-
       def initialize(referrer)
         @referrer = referrer
       end
 
       def referring_domain
-        @referring_domain ||= (self.class.referrer_parser.parse(@referrer)[:domain][0..255] rescue nil).presence
+        @referring_domain ||= Addressable::URI.parse(@referrer).host.first(255) rescue nil
       end
 
       def search_keyword
@@ -18,7 +17,6 @@ module Ahoy
       def self.referrer_parser
         @referrer_parser ||= RefererParser::Parser.new
       end
-
     end
   end
 end

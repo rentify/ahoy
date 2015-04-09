@@ -1,8 +1,8 @@
 class <%= migration_class_name %> < ActiveRecord::Migration
   def change
     create_table :visits, id: false do |t|
-      t.uuid :id, primary_key: true
-      t.uuid :visitor_id
+      t.uuid :id, default: nil, primary_key: true
+      t.uuid :visitor_id, default: nil
 
       # the rest are recommended but optional
       # simply remove the columns you don't want
@@ -25,11 +25,16 @@ class <%= migration_class_name %> < ActiveRecord::Migration
       t.string :browser
       t.string :os
       t.string :device_type
+      t.integer :screen_height
+      t.integer :screen_width
 
       # location
       t.string :country
       t.string :region
       t.string :city
+      t.string :postal_code
+      t.decimal :latitude
+      t.decimal :longitude
 
       # utm parameters
       t.string :utm_source

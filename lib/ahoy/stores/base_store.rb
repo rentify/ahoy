@@ -1,7 +1,6 @@
 module Ahoy
   module Stores
     class BaseStore
-
       def initialize(options)
         @options = options
       end
@@ -17,7 +16,7 @@ module Ahoy
 
       def authenticate(user)
         @user = user
-        if visit and visit.respond_to?(:user) and !visit.user
+        if visit && visit.respond_to?(:user) && !visit.user
           begin
             visit.user = user
             visit.save!
@@ -67,7 +66,6 @@ module Ahoy
 
       def set_visit_properties(visit)
         keys = visit_properties.keys
-        keys -= Ahoy::VisitProperties::LOCATION_KEYS if Ahoy.geocode != true
         keys.each do |key|
           visit.send(:"#{key}=", visit_properties[key]) if visit.respond_to?(:"#{key}=") && visit_properties[key]
         end
@@ -79,6 +77,12 @@ module Ahoy
         end
       end
 
+      def unique_exception_classes
+        classes = []
+        classes << ActiveRecord::RecordNotUnique if defined?(ActiveRecord::RecordNotUnique)
+        classes << PG::UniqueViolation if defined?(PG::UniqueViolation)
+        classes
+      end
     end
   end
 end

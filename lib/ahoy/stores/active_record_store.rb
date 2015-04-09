@@ -1,7 +1,6 @@
 module Ahoy
   module Stores
     class ActiveRecordStore < BaseStore
-
       def track_visit(options, &block)
         visit =
           visit_model.new do |v|
@@ -18,7 +17,7 @@ module Ahoy
         begin
           visit.save!
           geocode(visit)
-        rescue ActiveRecord::RecordNotUnique
+        rescue *unique_exception_classes
           # do nothing
         end
       end
@@ -38,7 +37,7 @@ module Ahoy
 
         begin
           event.save!
-        rescue ActiveRecord::RecordNotUnique
+        rescue *unique_exception_classes
           # do nothing
         end
       end
@@ -56,7 +55,6 @@ module Ahoy
       def event_model
         ::Ahoy::Event
       end
-
     end
   end
 end

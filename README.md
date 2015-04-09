@@ -1,12 +1,14 @@
 # Ahoy
 
+:fire: Never build an analytics platform from scratch again.
+
 Ahoy provides a solid foundation to track visits and events in Ruby, JavaScript, and native apps.
 
-:fire: Works with any data store so you can easily scale.
+Works with any data store so you can easily scale.
+
+:tangerine: Battle-tested at [Instacart](https://www.instacart.com/opensource)
 
 :postbox: To track emails, check out [Ahoy Email](https://github.com/ankane/ahoy_email).
-
-Never build an analytics platform from scratch again.
 
 See [upgrade instructions](#upgrading) on how to move to 1.0.
 
@@ -297,7 +299,7 @@ Ahoy.visit_duration = 30.minutes
 
 ### ActiveRecord
 
-Let’s associate orders with visits.
+Let’s associate orders with visits. Add a `visit_id` column on orders and do:
 
 ```ruby
 class Order < ActiveRecord::Base
@@ -404,7 +406,7 @@ Visit.group(:referring_domain).count
 [Chartkick](http://chartkick.com/) and [Groupdate](https://github.com/ankane/groupdate) make it super easy to visualize the data.
 
 ```erb
-<%= line_chart Visit.group_by_day(:created_at).count %>
+<%= line_chart Visit.group_by_day(:started_at).count %>
 ```
 
 See where orders are coming from with simple joins:
